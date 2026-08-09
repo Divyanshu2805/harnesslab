@@ -83,8 +83,10 @@ def models(
             m.key,
             m.lane.value,
             m.inspect_model,
-            f"{ceiling:,}" if ceiling else "—",
-            "∞" if per_day is None else f"{per_day:,}",
+            f"{ceiling:,}" if ceiling else "-",
+            # Plain ASCII: the Windows console is cp1252 and cannot encode the
+            # infinity sign, which crashes rich mid-render.
+            "no cap" if per_day is None else f"{per_day:,}",
             m.limits.binds_on(),
             gate if m.lane is Lane.LOCAL else "—",
         )
