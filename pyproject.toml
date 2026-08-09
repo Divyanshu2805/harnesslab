@@ -54,8 +54,8 @@ viz = [
 harnesslab = "harnesslab.cli:app"
 
 [project.urls]
-Repository = "https://github.com/USERNAME/harnesslab"
-Leaderboard = "https://USERNAME.github.io/harnesslab/"
+Repository = "https://github.com/Divyanshu2805/harnesslab"
+Leaderboard = "https://divyanshu2805.github.io/harnesslab/"
 
 [build-system]
 requires = ["hatchling"]
