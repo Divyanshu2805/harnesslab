@@ -8,18 +8,22 @@ license = { file = "LICENSE" }
 authors = [{ name = "Divyanshu Agrahari" }]
 keywords = ["llm", "agents", "evaluation", "benchmark", "inspect-ai"]
 
+# Floors are the versions this project was actually resolved and smoke-tested
+# against, not aspirational minimums. A floor 100 releases stale invites a fresh
+# resolution to pick an API the specs were never written for -- openai in
+# particular has since crossed a major version.
 dependencies = [
     # Evaluation framework. Provides Task/Solver/Scorer, the typed per-sample
     # Store, structured .eval logs, and native providers for every model we use.
-    "inspect-ai>=0.3.60",
+    "inspect-ai>=0.3.254",
     # Native provider SDKs. Note there is deliberately no litellm here: Inspect
     # covers groq/google/mistral/ollama/openrouter natively and reaches Cerebras
     # through its openai-api/ compatible path. See docs/adr/0001.
-    "openai>=1.60.0",          # also serves openai-api/cerebras/* and ollama
-    "google-genai>=1.0.0",
-    "groq>=0.13.0",
-    "mistralai>=1.2.0",
-    "pydantic>=2.10.0",
+    "openai>=2.53.0",          # also serves openai-api/cerebras/* and ollama
+    "google-genai>=2.17.0",
+    "groq>=1.6.0",
+    "mistralai>=2.9.1",
+    "pydantic>=2.13.0",
     "pydantic-settings>=2.7.0",
     "typer>=0.15.0",
     "rich>=13.9.0",
@@ -29,9 +33,9 @@ dependencies = [
     "pyarrow>=18.0.0",
     "numpy>=2.1.0",
     "scipy>=1.14.0",
-    "statsmodels>=0.14.0",
+    "statsmodels>=0.14.6",
     # Results store. Postgres is the source of truth; SQLite is stdlib.
-    "psycopg[binary]>=3.2.0",
+    "psycopg[binary]>=3.3.0",
     "sqlalchemy>=2.0.36",
 ]
 
