@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 620" width="820" height="620" role="img" aria-label="Two-lane architecture: an evaluation lane holding all provider credentials, a one-way build step producing static JSON, and a serving lane of prebuilt static files. No code path leads from the serving lane back to the providers.">
+  <title>HarnessLab two-lane architecture</title>
+  <desc>The evaluation lane runs in scheduled CI and on local GPUs and holds all provider credentials. It emits .eval logs which are ingested into Postgres. A one-way CI build step produces static JSON for the serving lane, which is prebuilt static files on GitHub Pages. A visitor reaches only the serving lane; no code path leads back to the providers.</desc>
+
+  <defs>
+    <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#8b949e"/>
+    </marker>
+    <marker id="arw-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#e5484d"/>
+    </marker>
+    <style>
+      .lbl   { font: 12px system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; fill: #8b949e; }
+      .lane  { font: 700 13px system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; letter-spacing: .08em; }
+      .sub   { font: 12px system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; fill: #8b949e; }
+      .box   { font: 600 13px system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; fill: #fff; }
+      .boxm  { font: 600 12.5px ui-monospace, SFMono-Regular, Consolas, monospace; fill: #fff; }
+      .warn  { font: 600 12px system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; fill: #e5484d; }
+    </style>
+  </defs>
+
+  <!-- ══ EVALUATION LANE ══ -->
+  <rect x="30" y="40" width="760" height="220" rx="10" fill="none" stroke="#f0883e" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="52" y="68" class="lane" fill="#f0883e">EVALUATION LANE</text>
+  <text x="52" y="90" class="sub">scheduled GitHub Actions · local GPU sweeps — holds every provider credential</text>
+
+  <!-- row 1 -->
+  <rect x="60"  y="112" width="130" height="42" rx="6" fill="#8957e5"/>
+  <text x="125" y="138" class="box" text-anchor="middle">providers</text>
+  <rect x="225" y="112" width="140" height="42" rx="6" fill="#1f6feb"/>
+  <text x="295" y="138" class="box" text-anchor="middle">harnesses</text>
+  <rect x="400" y="112" width="110" height="42" rx="6" fill="#1f6feb"/>
+  <text x="455" y="138" class="box" text-anchor="middle">tools</text>
+  <rect x="545" y="112" width="145" height="42" rx="6" fill="#1f6feb"/>
+  <text x="617" y="132" class="box" text-anchor="middle">env</text>
+  <text x="617" y="147" class="boxm" text-anchor="middle" opacity=".85">Store</text>
+
+  <line x1="192" y1="133" x2="221" y2="133" stroke="#8b949e" stroke-width="1.6" marker-end="url(#arw)"/>
+  <line x1="367" y1="133" x2="396" y2="133" stroke="#8b949e" stroke-width="1.6" marker-end="url(#arw)"/>
+  <line x1="512" y1="133" x2="541" y2="133" stroke="#8b949e" stroke-width="1.6" marker-end="url(#arw)"/>
+
+  <!-- row 2 -->
+  <line x1="295" y1="156" x2="295" y2="188" stroke="#8b949e" stroke-width="1.6" marker-end="url(#arw)"/>
+  <rect x="225" y="192" width="140" height="42" rx="6" fill="#1a7f8c"/>
+  <text x="295" y="212" class="box" text-anchor="middle">.eval logs</text>
+  <text x="295" y="227" class="sub" text-anchor="middle" fill="#cfe9ee">env state included</text>
+  <rect x="400" y="192" width="110" height="42" rx="6" fill="#1a7f8c"/>
+  <text x="455" y="218" class="box" text-anchor="middle">ingest</text>
+  <rect x="545" y="192" width="145" height="42" rx="6" fill="#238636"/>
+  <text x="617" y="218" class="box" text-anchor="middle">Postgres</text>
+
+  <line x1="367" y1="213" x2="396" y2="213" stroke="#8b949e" stroke-width="1.6" marker-end="url(#arw)"/>
+  <line x1="512" y1="213" x2="541" y2="213" stroke="#8b949e" stroke-width="1.6" marker-end="url(#arw)"/>
+
+  <!-- ══ one-way build step ══ -->
+  <line x1="410" y1="262" x2="410" y2="292" stroke="#8b949e" stroke-width="1.8" marker-end="url(#arw)"/>
+  <text x="424" y="281" class="lbl">build step (CI) — one way</text>
+
+  <rect x="330" y="296" width="160" height="40" rx="6" fill="#6e7681"/>
+  <text x="410" y="321" class="box" text-anchor="middle">static JSON</text>
+  <line x1="410" y1="338" x2="410" y2="368" stroke="#8b949e" stroke-width="1.8" marker-end="url(#arw)"/>
+
+  <!-- ══ the barrier ══ -->
+  <line x1="660" y1="368" x2="660" y2="266" stroke="#e5484d" stroke-width="1.8" stroke-dasharray="5 4" marker-end="url(#arw-red)"/>
+  <g stroke="#e5484d" stroke-width="2.6" stroke-linecap="round">
+    <line x1="652" y1="309" x2="668" y2="325"/>
+    <line x1="668" y1="309" x2="652" y2="325"/>
+  </g>
+  <text x="680" y="313" class="warn">no code path</text>
+  <text x="680" y="329" class="warn">exists</text>
+
+  <!-- ══ SERVING LANE ══ -->
+  <rect x="30" y="372" width="760" height="145" rx="10" fill="none" stroke="#d29922" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="52" y="399" class="lane" fill="#d29922">SERVING LANE</text>
+  <text x="52" y="420" class="sub">GitHub Pages — prebuilt static files, no backend</text>
+
+  <rect x="60"  y="436" width="200" height="40" rx="6" fill="#bb8009"/>
+  <text x="160" y="461" class="box" text-anchor="middle">static HTML + JSON</text>
+  <rect x="290" y="436" width="185" height="40" rx="6" fill="#bb8009"/>
+  <text x="382" y="461" class="box" text-anchor="middle">client-side charts</text>
+
+  <text x="52" y="502" class="sub">No backend · no database connection · no model call on any path</text>
+
+  <!-- ══ visitor ══ -->
+  <line x1="410" y1="558" x2="410" y2="521" stroke="#8b949e" stroke-width="1.8" marker-end="url(#arw)"/>
+  <rect x="330" y="560" width="160" height="40" rx="6" fill="#484f58"/>
+  <text x="410" y="585" class="box" text-anchor="middle">visitor</text>
+  <text x="506" y="585" class="lbl">reaches the serving lane only</text>
+</svg>

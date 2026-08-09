@@ -17,6 +17,7 @@ from __future__ import annotations
 import re
 import sys
 from pathlib import Path
+from xml.etree import ElementTree
 
 ROOT = Path(__file__).resolve().parent.parent
 SPECS = ROOT / "specs"
@@ -149,6 +150,38 @@ def main() -> int:
         for match in re.finditer(r"\]\(([^)#:]+\.md)[^)]*\)", path.read_text(encoding="utf-8")):
             if not (path.parent / match.group(1)).resolve().exists():
                 failures.append(f"{path.relative_to(ROOT)}: dangling link -> {match.group(1)}")
+
+    # -- every referenced image exists
+    for path in [*markdown, ROOT / "README.md"]:
+        text = path.read_text(encoding="utf-8")
+        refs = [*re.findall(r'<img[^>]+src="([^"]+)"', text),
+                *re.findall(r"!\[[^\]]*\]\(([^)\s]+)\)", text)]
+        for src in refs:
+            if src.startswith(("http://", "https://", "data:")):
+                continue
+            if not (path.parent / src).resolve().exists():
+                failures.append(f"{path.relative_to(ROOT)}: missing image -> {src}")
+
+    # -- every SVG parses. GitHub renders SVG only as a referenced file, so a
+    #    malformed one fails silently in the browser rather than loudly here.
+    for svg in sorted((ROOT / "docs" / "assets").glob("*.svg")):
+        try:
+            ElementTree.parse(svg)
+        except ElementTree.ParseError as exc:
+            failures.append(f"{svg.relative_to(ROOT)}: malformed SVG ({exc})")
+
+    # -- no ASCII box-drawing art. Diagrams are SVG (layout) or Mermaid (graphs);
+    #    GitHub strips inline <svg>, so SVG must live in docs/assets and be
+    #    referenced. Ranges are box-drawing U+2500-257F plus arrow triangles --
+    #    deliberately NOT the em-dash U+2014, which the prose uses everywhere.
+    box_art = re.compile(r"[─-╿▲▶▼◀]")
+    for path in [*markdown, ROOT / "README.md"]:
+        for lineno, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+            if box_art.search(line):
+                failures.append(
+                    f"{path.relative_to(ROOT)}:{lineno}: ASCII box-drawing art -- "
+                    f"use an SVG in docs/assets or a ```mermaid block"
+                )
 
     print(f"specs: {len(specs)} ({min(specs):03d}-{max(specs):03d})   docs: {len(REQUIRED_DOCS)}   adrs: {N_ADRS}")
     for note in notes:

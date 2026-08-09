@@ -11,12 +11,13 @@ anyone is invested in a particular answer.
 
 ## Lifecycle
 
-```
-Draft ──────► Approved ──────► In Progress ──────► Accepted
-  │              │                    │                 │
-written      reviewed by         implementation    all acceptance
-against      the author;         underway on a     criteria
-TEMPLATE.md  scope frozen        branch            demonstrated
+```mermaid
+flowchart LR
+  D["<b>Draft</b><br/><small>written against<br/>TEMPLATE.md</small>"]
+  A["<b>Approved</b><br/><small>reviewed;<br/>scope frozen</small>"]
+  P["<b>In Progress</b><br/><small>implementation<br/>on a branch</small>"]
+  C["<b>Accepted</b><br/><small>every acceptance<br/>criterion demonstrated</small>"]
+  D --> A --> P --> C
 ```
 
 A spec's status lives in its own frontmatter. `ROADMAP.md` is the single source

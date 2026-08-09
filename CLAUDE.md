@@ -74,6 +74,28 @@ touched.
 Any subprocess call that reads repository text must pin `encoding="utf-8"` — the
 Windows default codepage mangles the em-dashes the docs are full of.
 
+### Diagrams
+
+**No ASCII box-drawing art.** `verify_scaffold.py` fails the build on box-drawing
+characters (U+2500–U+257F) and arrow triangles, so it cannot creep back in. Two
+allowed forms:
+
+- **Hand-authored SVG** in `docs/assets/`, for diagrams where layout carries
+  meaning — nesting, deliberate barriers, spatial grouping.
+- **Mermaid** in a ```` ```mermaid ```` fence, for graphs and flows. Preferred when
+  auto-layout is adequate: it stays diffable in review and follows GitHub's theme
+  toggle for free.
+
+**GitHub strips inline `<svg>` from markdown.** An SVG must be a committed file
+referenced with `<img src="assets/x.svg">`; pasting the markup inline renders
+nothing at all.
+
+Two rules make the SVGs readable on both GitHub themes without maintaining light
+and dark variants: **keep all text inside filled shapes** so contrast is
+self-contained, and use **mid-tone grey (`#8b949e`) for anything outside a shape**,
+which reads on white and dark alike. Only generic font families — an SVG loaded
+via `<img>` cannot fetch webfonts.
+
 ## Spec-driven workflow
 
 **One spec is implemented, reviewed, and merged at a time.**

@@ -11,26 +11,10 @@ to be careful.
 The cost property is structural, not a configuration setting. That distinction is
 the point.
 
-```
-   ┌──────────────────── EVALUATION LANE ────────────────────┐
-   │  Scheduled GitHub Actions  ·  local GPU sweeps          │
-   │                                                          │
-   │  providers ─► harnesses ─► tools ─► env (Store)          │
-   │                   │                                      │
-   │                   ▼                                      │
-   │            .eval logs  ──►  ingest  ──►  Postgres        │
-   └──────────────────────────┬───────────────────────────────┘
-                              │  build step (CI)
-                              ▼
-                        static JSON
-                              │
-   ┌──────────────────────────▼───────────────────────────────┐
-   │                    SERVING LANE                          │
-   │  GitHub Pages · static HTML + JSON · client-side charts  │
-   │                                                          │
-   │  No backend. No database connection. No model calls.     │
-   └──────────────────────────────────────────────────────────┘
-```
+<p align="center">
+  <img src="assets/two-lane-architecture.svg" width="820"
+       alt="The evaluation lane holds every provider credential and runs in scheduled CI and on local GPUs, emitting .eval logs that are ingested into Postgres. A one-way CI build step produces static JSON for the serving lane, which is prebuilt static files on GitHub Pages. A visitor reaches the serving lane only; no code path leads back to the providers.">
+</p>
 
 **A visitor cannot cause a model call.** Not because a rate limiter says no —
 because there is no code path from the public internet to a provider. The serving
@@ -123,12 +107,10 @@ src/harnesslab/
 
 ### Dependency direction
 
-```
-providers ──► budget ──► harnesses ──► tasks ──► results ──► analysis
-                             ▲            │
-                          tools ──► env ──┘
-                             (scoring reads env)
-```
+<p align="center">
+  <img src="assets/module-map.svg" width="820"
+       alt="Module dependency direction: providers to budget to harnesses to tasks to results to analysis. harnesses depends on tools and tasks depends on scoring; both depend on env, the typed Store.">
+</p>
 
 Nothing in `analysis/` is imported by anything that runs during a sweep, and
 nothing in `harnesses/` knows which model it is running. Two invariants follow:

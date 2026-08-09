@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 300" width="820" height="300" role="img" aria-label="Module dependency direction: providers to budget to harnesses to tasks to results to analysis, with harnesses depending on tools and tasks on scoring, both of which depend on env.">
+  <title>HarnessLab module dependency direction</title>
+  <desc>Arrows point from a module to what it depends on. providers, budget, harnesses, tasks, results and analysis form the main chain. harnesses depends on tools and tasks depends on scoring; both tools and scoring depend on env. Nothing in analysis is imported by anything that runs during a sweep.</desc>
+
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#8b949e"/>
+    </marker>
+    <style>
+      .m    { font: 600 12.5px ui-monospace, SFMono-Regular, Consolas, monospace; fill: #fff; }
+      .lbl  { font: 12px system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; fill: #8b949e; }
+      .note { font: italic 12px system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; fill: #8b949e; }
+    </style>
+  </defs>
+
+  <text x="20" y="28" class="lbl">An arrow points from a module to what it depends on.</text>
+
+  <!-- main chain -->
+  <rect x="20"  y="58" width="112" height="40" rx="6" fill="#8957e5"/>
+  <text x="76"  y="83" class="m" text-anchor="middle">providers</text>
+  <rect x="162" y="58" width="100" height="40" rx="6" fill="#8957e5"/>
+  <text x="212" y="83" class="m" text-anchor="middle">budget</text>
+  <rect x="292" y="58" width="118" height="40" rx="6" fill="#1f6feb"/>
+  <text x="351" y="83" class="m" text-anchor="middle">harnesses</text>
+  <rect x="440" y="58" width="96"  height="40" rx="6" fill="#1f6feb"/>
+  <text x="488" y="83" class="m" text-anchor="middle">tasks</text>
+  <rect x="566" y="58" width="104" height="40" rx="6" fill="#238636"/>
+  <text x="618" y="83" class="m" text-anchor="middle">results</text>
+  <rect x="700" y="58" width="104" height="40" rx="6" fill="#1a7f8c"/>
+  <text x="752" y="83" class="m" text-anchor="middle">analysis</text>
+
+  <line x1="134" y1="78" x2="158" y2="78" stroke="#8b949e" stroke-width="1.6" marker-end="url(#a)"/>
+  <line x1="264" y1="78" x2="288" y2="78" stroke="#8b949e" stroke-width="1.6" marker-end="url(#a)"/>
+  <line x1="412" y1="78" x2="436" y2="78" stroke="#8b949e" stroke-width="1.6" marker-end="url(#a)"/>
+  <line x1="538" y1="78" x2="562" y2="78" stroke="#8b949e" stroke-width="1.6" marker-end="url(#a)"/>
+  <line x1="672" y1="78" x2="696" y2="78" stroke="#8b949e" stroke-width="1.6" marker-end="url(#a)"/>
+
+  <!-- second layer -->
+  <line x1="351" y1="100" x2="351" y2="154" stroke="#8b949e" stroke-width="1.6" marker-end="url(#a)"/>
+  <line x1="488" y1="100" x2="488" y2="154" stroke="#8b949e" stroke-width="1.6" marker-end="url(#a)"/>
+
+  <rect x="292" y="158" width="118" height="40" rx="6" fill="#1f6feb"/>
+  <text x="351" y="183" class="m" text-anchor="middle">tools</text>
+  <rect x="430" y="158" width="116" height="40" rx="6" fill="#1f6feb"/>
+  <text x="488" y="183" class="m" text-anchor="middle">scoring</text>
+
+  <!-- env -->
+  <line x1="351" y1="200" x2="392" y2="234" stroke="#8b949e" stroke-width="1.6" marker-end="url(#a)"/>
+  <line x1="488" y1="200" x2="448" y2="234" stroke="#8b949e" stroke-width="1.6" marker-end="url(#a)"/>
+  <rect x="372" y="238" width="96" height="40" rx="6" fill="#6e40aa"/>
+  <text x="420" y="263" class="m" text-anchor="middle">env</text>
+
+  <text x="490" y="258" class="note">the typed Store — the single</text>
+  <text x="490" y="274" class="note">source of environment state</text>
+
+  <text x="20" y="183" class="lbl">A harness never</text>
+  <text x="20" y="199" class="lbl">branches on model.</text>
+  <text x="20" y="255" class="lbl">A scorer never</text>
+  <text x="20" y="271" class="lbl">inspects the harness.</text>
+</svg>

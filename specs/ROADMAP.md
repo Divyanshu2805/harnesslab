@@ -131,24 +131,59 @@ and does not need the suite selection.
 
 ## Dependency graph
 
+An arrow points from a spec to the spec that depends on it.
+
+```mermaid
+flowchart LR
+  000([000 scaffold]) --> 001([001 providers])
+  000 --> 002([002 env gen])
+  000 --> 018([018 results schema])
+
+  001 --> 006([006 token budget])
+  002 --> 003([003 tools])
+  003 --> 004([004 scorers])
+  004 --> 005([005 fs family])
+  003 --> 005
+  003 --> FAM([012–016 families 2–6])
+  004 --> FAM
+
+  006 --> 007([007 single_shot, react])
+  003 --> 007
+  007 --> 008([008 plan_execute, retry])
+  007 --> 009([009 reflect, compaction])
+  007 --> 010([010 Lane A gate])
+  001 --> 011([011 provider runner])
+  006 --> 011
+
+  FAM --> 028([028 solvability]):::gate
+  005 --> 028
+  028 --> 017([017 core-20])
+
+  024([024 bootstrap core]) --> 029([029 power + prereg]):::gate
+  024 --> 025([025 ablation])
+  024 --> 031([031 statistics])
+  031 --> 025
+
+  018 --> 019([019 ingest])
+  019 --> 020([020 leaderboard]):::prot
+  020 --> 021([021 charts]):::prot
+  011 --> 022([022 CI])
+  019 --> 022
+  022 --> 023([023 seed regimes])
+  002 --> 023
+  019 --> 026([026 failure taxonomy])
+  019 --> 027([027 dataset])
+  023 --> 027
+  021 --> 030([030 paper + blog])
+  025 --> 030
+
+  classDef gate stroke:#e5484d,stroke-width:2px
+  classDef prot stroke:#d29922,stroke-width:2px
 ```
-000 ─┬─► 001 ─┬─► 006 ─┬─► 007 ─┬─► 010
-     │        │        │        ├─► 008
-     │        │        │        └─► 009
-     │        └────────┴─► 011 ──────────────┐
-     ├─► 002 ─► 003 ─┬─► 004 ─┬─► 005 ──┐    │
-     │               │        │          │    │
-     │               └────────┴─► 012…016 ┤   │
-     │                                    │   │
-     └─► 018 ─► 019 ─┬─► 020 ─► 021 ──────┼───┤
-                     ├─► 022 ─► 023       │   │
-                     └─► 026              │   │
-                                          ▼   ▼
-                              028 ─► 017 ─► 024 ─┬─► 029
-                                                 ├─► 025 ─► 030
-                                                 └─► 031 ──┘
-                                          019 + 023 ─► 027
-```
+
+<sub>Red outline = a gate that blocks everything downstream. Amber = protected
+scope (see below). **024 depends on nothing** — it is generic statistics tested on
+synthetic data, which is what lets 029 run the day after it.</sub>
 
 ## Protected scope
 

@@ -131,13 +131,11 @@ quota and Day 18 would fail at task 40 of 53. Spill target: Groq
 
 The estimator forecasts; the ledger records; `admit()` decides.
 
-```
-Verdict        Meaning
-─────────      ─────────────────────────────────────────────────────────
-ADMIT          The whole plan fits in today's remaining quota.
-ADMIT_PARTIAL  A cell-aligned prefix fits; the rest defers to tomorrow.
-REJECT         Not enough remaining quota. Nothing is started.
-```
+| Verdict | Meaning |
+|---|---|
+| `ADMIT` | The whole plan fits in today's remaining quota. |
+| `ADMIT_PARTIAL` | A cell-aligned prefix fits; the rest defers to tomorrow. |
+| `REJECT` | Not enough remaining quota. **Nothing is started.** |
 
 Two properties matter:
 
