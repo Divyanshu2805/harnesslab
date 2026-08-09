@@ -1,0 +1,7 @@
+#!/bin/sh
+# Append this commit's changes to DEVLOG.md (gitignored, local only).
+#
+# Deliberately non-fatal: the commit has already happened, so a failure here
+# must never look like a failed commit.
+
+python scripts/devlog.py || echo "devlog: skipped (see above)" >&2

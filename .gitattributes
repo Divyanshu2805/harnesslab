@@ -1,0 +1,22 @@
+# Normalize line endings in the repository to LF.
+#
+# This is not cosmetic. SPEC-002 AC-7 requires generate_env() to produce
+# byte-identical canonical output on Windows and Linux, and SPEC-003 AC-4
+# requires byte-identical tool error strings across processes. Development
+# happens on Windows and CI runs on both, so leaving line endings to
+# core.autocrlf would make committed fixtures and golden digests differ by
+# platform -- which would surface as a determinism failure that has nothing to
+# do with the generator.
+
+* text=auto eol=lf
+
+# Golden fixtures and committed digests: never touched, under any setting.
+tests/golden/** -text
+data/seeds/*.json -text
+data/suites/*.json -text
+
+# Binary
+*.eval binary
+*.pdf binary
+*.png binary
+*.jpg binary

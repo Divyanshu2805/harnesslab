@@ -1,0 +1,25 @@
+#!/bin/sh
+# Keep the documentation consistent with what is being committed.
+#
+# 1. sync_docs regenerates the derived sections (spec statuses, counts, what is
+#    next) from spec frontmatter, and the changed files are re-staged, so a
+#    commit can never record a state its own docs disagree with.
+# 2. verify_scaffold then enforces the structural invariants: dependencies
+#    resolve, nothing is scheduled before what it depends on, required docs
+#    exist, no internal link dangles.
+#
+# Bypass with `git commit --no-verify` if you genuinely need to.
+
+set -e
+
+python scripts/sync_docs.py --write
+
+# Re-stage only the files sync_docs is allowed to touch. Scoped deliberately so
+# a partial commit does not pick up unrelated unstaged work.
+for f in README.md docs/README.md specs/ROADMAP.md; do
+    if [ -f "$f" ]; then
+        git add "$f"
+    fi
+done
+
+python scripts/verify_scaffold.py

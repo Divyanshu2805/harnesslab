@@ -1,0 +1,48 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Tooling caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Secrets. Never commit a provider key -- see .env.example for the shape.
+.env
+.env.local
+
+# Inspect eval logs. These are large binary artifacts; they are uploaded as CI
+# artifacts and ingested into Postgres, never committed. The normalized rows in
+# the results DB plus the git SHA are what make a run reproducible.
+logs/
+*.eval
+
+# Generated leaderboard payloads. Rebuilt by CI from the results DB on every
+# publish, so committing them would only create merge conflicts.
+site/data/*.json
+
+# Local working record, appended by the post-commit hook. Deliberately untracked:
+# it describes this working copy's history, not the project's shared state.
+DEVLOG.md
+
+# Local scratch
+scratch/
+*.local.*
+
+# Paper build artifacts (the .tex source IS committed)
+paper/*.aux
+paper/*.bbl
+paper/*.blg
+paper/*.log
+paper/*.out
+paper/*.synctex.gz
+paper/*.pdf
+
+# OS
+.DS_Store
+Thumbs.db
