@@ -16,8 +16,10 @@ claim means what it says, not because of style preference.
 
 ```bash
 uv sync --extra dev          # install
-make check                   # the per-spec gate: scaffold + lint + types + tests
+make hooks                   # install git hooks — run once per clone
+make check                   # the per-spec gate: sync + scaffold + lint + types + tests
 make scaffold                # spec dependency/ordering/link checks (instant)
+make sync                    # regenerate derived doc sections
 make fmt                     # ruff format + autofix
 ```
 
@@ -42,8 +44,35 @@ provider gets the `network` marker; anything needing the GPU gets `gpu`.
 
 `make scaffold` (`scripts/verify_scaffold.py`) enforces that spec dependencies
 resolve, that no dependency is scheduled *after* its dependant, that required docs
-exist, and that no internal links dangle. It runs first because it catches
+exist, and that no internal links dangle. It runs early because it catches
 planning errors invisible to the type checker.
+
+### Commits, docs, and DEVLOG
+
+**Commit messages are short — a single subject line.** The detail belongs in
+`DEVLOG.md`, which the `post-commit` hook writes automatically.
+
+Hooks live in `.githooks/` (versioned; `make hooks` points `core.hooksPath` at
+them):
+
+- **pre-commit** runs `sync_docs.py --write`, re-stages the three files it may
+  touch, then runs `verify_scaffold.py`. So a commit can never record a state its
+  own documentation disagrees with.
+- **post-commit** appends a `DEVLOG.md` entry derived from the diff: spec status
+  transitions, new specs/docs by title, files grouped by area, and the project
+  state at that commit.
+
+**`DEVLOG.md` is gitignored** — a local record of *this* working copy, absent from
+a fresh clone.
+
+Regions between `<!-- BEGIN GENERATED: x -->` and `<!-- END GENERATED: x -->` in
+`README.md`, `docs/README.md`, and `specs/ROADMAP.md` are **rewritten from spec
+frontmatter — never edit them by hand.** To change what appears there, edit
+`scripts/sync_docs.py`. Everything outside the markers is hand-written and never
+touched.
+
+Any subprocess call that reads repository text must pin `encoding="utf-8"` — the
+Windows default codepage mangles the em-dashes the docs are full of.
 
 ## Spec-driven workflow
 

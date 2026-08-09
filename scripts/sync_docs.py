@@ -83,7 +83,8 @@ def git_sha() -> str:
     try:
         out = subprocess.run(
             ["git", "rev-parse", "--short", "HEAD"],
-            cwd=ROOT, capture_output=True, text=True, check=True,
+            cwd=ROOT, capture_output=True, text=True,
+            encoding="utf-8", errors="replace", check=True,
         )
         return out.stdout.strip()
     except subprocess.CalledProcessError:

@@ -5,7 +5,7 @@ was decided and why**.
 
 <!-- BEGIN GENERATED: doc-counts -->
 
-32 specs · 9 documents · 11 ADRs · synced at `(no commits yet)`
+32 specs · 9 documents · 11 ADRs · synced at `31c8c34`
 
 <!-- END GENERATED: doc-counts -->
 

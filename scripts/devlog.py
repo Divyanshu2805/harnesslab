@@ -51,19 +51,21 @@ AREAS: list[tuple[str, str]] = [
 STATUS_RANK = {"Draft": 0, "Approved": 1, "In Progress": 2, "Accepted": 3}
 
 
+# Every subprocess call pins UTF-8. Without it Python uses the system codepage
+# (cp1252 on Windows), which turns every em-dash in a spec title into mojibake
+# and throws outright on some bytes. The docs are full of em-dashes.
+_RUN = {"cwd": ROOT, "capture_output": True, "text": True,
+        "encoding": "utf-8", "errors": "replace"}
+
+
 def git(*args: str) -> str:
-    return subprocess.run(
-        ["git", *args], cwd=ROOT, capture_output=True, text=True, check=True
-    ).stdout.strip()
+    return subprocess.run(["git", *args], check=True, **_RUN).stdout.strip()
 
 
 def show(rev: str, path: str) -> str | None:
     """File contents at a revision, or None if it did not exist there."""
     try:
-        return subprocess.run(
-            ["git", "show", f"{rev}:{path}"],
-            cwd=ROOT, capture_output=True, text=True, check=True,
-        ).stdout
+        return subprocess.run(["git", "show", f"{rev}:{path}"], check=True, **_RUN).stdout
     except subprocess.CalledProcessError:
         return None
 
