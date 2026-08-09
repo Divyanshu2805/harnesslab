@@ -23,7 +23,6 @@ from __future__ import annotations
 
 import argparse
 import re
-import subprocess
 import sys
 from dataclasses import dataclass
 from pathlib import Path
@@ -79,18 +78,6 @@ def adr_files() -> list[Path]:
     return sorted((ROOT / "docs" / "adr").glob("*.md"))
 
 
-def git_sha() -> str:
-    try:
-        out = subprocess.run(
-            ["git", "rev-parse", "--short", "HEAD"],
-            cwd=ROOT, capture_output=True, text=True,
-            encoding="utf-8", errors="replace", check=True,
-        )
-        return out.stdout.strip()
-    except subprocess.CalledProcessError:
-        return "(no commits yet)"
-
-
 # --- section builders --------------------------------------------------------
 
 
@@ -136,10 +123,10 @@ def build_spec_status(specs: list[Spec]) -> str:
 
 
 def build_doc_counts(specs: list[Spec]) -> str:
-    return (
-        f"{len(specs)} specs · {len(doc_files())} documents · {len(adr_files())} ADRs · "
-        f"synced at `{git_sha()}`\n"
-    )
+    # Deliberately no commit SHA. This runs in pre-commit, before the commit
+    # exists, so any SHA here would be the parent's -- permanently off by one,
+    # and it would dirty this file on every single commit.
+    return f"{len(specs)} specs · {len(doc_files())} documents · {len(adr_files())} ADRs\n"
 
 
 SECTIONS = {
