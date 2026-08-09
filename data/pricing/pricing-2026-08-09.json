@@ -1,0 +1,61 @@
+{
+  "_comment": [
+    "Published PAID per-token rates, used to compute notional cost from tokens",
+    "actually consumed on free tiers. See docs/COST_MODEL.md.",
+    "",
+    "Entries start verified:false and CANNOT produce a cost until confirmed",
+    "against the vendor's own pricing page -- pricing.cost_usd() raises. An",
+    "invented rate is indistinguishable from a real one once it is plotted, so",
+    "the loader refuses rather than guesses.",
+    "",
+    "To fill these in: run `make pricing`, confirm each rate against source_url,",
+    "then set verified:true. Lane A models have no per-token price at all and",
+    "are costed by GPU-hour rental equivalent instead (gpu-rental-<date>.json)."
+  ],
+  "currency": "USD",
+  "prices": {
+    "gemini-flash-lite": {
+      "usd_per_1m_input": null,
+      "usd_per_1m_output": null,
+      "source_url": "https://ai.google.dev/gemini-api/docs/pricing",
+      "verified": false
+    },
+    "gemini-flash": {
+      "usd_per_1m_input": null,
+      "usd_per_1m_output": null,
+      "source_url": "https://ai.google.dev/gemini-api/docs/pricing",
+      "verified": false
+    },
+    "groq-llama-8b": {
+      "usd_per_1m_input": null,
+      "usd_per_1m_output": null,
+      "source_url": "https://groq.com/pricing/",
+      "verified": false
+    },
+    "groq-llama-70b": {
+      "usd_per_1m_input": null,
+      "usd_per_1m_output": null,
+      "source_url": "https://groq.com/pricing/",
+      "verified": false
+    },
+    "cerebras-gpt-oss-120b": {
+      "usd_per_1m_input": null,
+      "usd_per_1m_output": null,
+      "source_url": "https://www.cerebras.ai/pricing",
+      "verified": false
+    },
+    "openrouter-free": {
+      "usd_per_1m_input": null,
+      "usd_per_1m_output": null,
+      "source_url": "https://openrouter.ai/models",
+      "verified": false,
+      "note": "Price the paid variant of the same weights, not the :free endpoint."
+    },
+    "mistral-small": {
+      "usd_per_1m_input": null,
+      "usd_per_1m_output": null,
+      "source_url": "https://mistral.ai/pricing",
+      "verified": false
+    }
+  }
+}

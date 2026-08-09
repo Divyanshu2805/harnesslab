@@ -1,7 +1,7 @@
 ---
 spec: 001
 title: Provider registry, quota limits, and capability probe
-status: Draft
+status: Accepted
 depends_on: [000]
 day: 1
 ---
@@ -141,8 +141,8 @@ digest is the identity; the string is an address.
 
 - **AC-1.** `registry()` returns every model referenced by the experimental
   design, and `pooled_grid()` returns exactly eight in a deterministic order.
-- **AC-2.** Constructing a Lane A `ModelSpec` with `in_pooled_grid=True` and a
-  null `ollama_digest` raises a validation error.
+- **AC-2.** *(Amended day 1 — see below.)* Constructing a Lane A `ModelSpec` with
+  `gate=PASSED` and a null `ollama_digest` raises a validation error.
 - **AC-3.** Every `QuotaLimits` in the registry carries a non-empty `source_url`
   and an ISO-8601 `fetched` date.
 - **AC-4.** `verify_providers.py --check` probes each provider, compares observed
@@ -169,7 +169,59 @@ digest is the identity; the string is an address.
 
 ## Definition of done
 
-- [ ] `make check` green
-- [ ] Every AC demonstrated by a named test
-- [ ] Docs updated: `docs/PROVIDERS.md` generated, `docs/adr/0001` and `0011` land
-- [ ] Status set to `Accepted`
+- [x] `make check` green
+- [x] Every AC demonstrated by a named test
+- [x] Docs updated: `docs/PROVIDERS.md` generated from live probes
+- [x] Status set to `Accepted`
+
+---
+
+## Day 1 outcome
+
+### Amendment to AC-2 — validation keys on gate status, not grid membership
+
+As written, AC-2 was unsatisfiable. It required a Lane A model in the pooled
+grid to carry a digest, but **no digest exists until SPEC-010 resolves one on
+day 8** — so either the registry could not declare its intended local models, or
+`pooled_grid()` could not return eight.
+
+Resolved with a `GateStatus` enum (`PENDING` / `PASSED` / `REJECTED`). The
+registry declares *intent*; the validator fires on `PASSED`, which is the point
+at which a model becomes usable in a scored run. `assert_sweep_ready()` refuses
+to start any sweep while a pooled model is still `PENDING`.
+
+The invariant is unchanged — an unpinned model can never produce a published
+number — but it is now enforced where it is actually checkable.
+
+### Probe findings
+
+| Model | Result |
+|---|---|
+| `groq-llama-8b` | Live-verified. 14,400 RPD, **6,000 TPM** — matches the registry. |
+| `groq-llama-70b` | Live-verified. 1,000 RPD, 12,000 TPM — matches. |
+| `mistral-small` | Live-verified **50 RPM / 50,000 TPM**. The provisional figures carried into day 1 (1 RPM / 500 RPD) were wrong by a wide margin. **Promoted into the pooled grid.** |
+| `openrouter-free` | Reachable. `is_free_tier: true`, so the 50 req/day tier. Its `rate_limit` field returns `-1` and is documented as deprecated. |
+| `cerebras-gpt-oss-120b` | **HTTP 402 — "Payment required to access this resource."** `/models` lists the catalogue; inference is refused. **Withdrawn from the pooled grid.** |
+| Gemini | Not probeable — limits are published only in AI Studio. Figures trusted from source, not confirmed. |
+| Ollama | Server up, **no models pulled**. Needed before day 8. |
+
+The pooled grid stays at eight: Mistral Small replaces Cerebras.
+
+### The finding that reaches beyond this spec
+
+**Cerebras' 8,192-token free context ceiling was the stated justification for
+capping every cell in the pooled grid ([adr/0008](../docs/adr/0008-shared-context-policy.md)).
+That premise no longer holds.**
+
+With Cerebras gone, the tightest context ceiling in the grid is 32,768. Nothing
+now *forces* an 8K shared policy.
+
+The new binding constraint is **Groq's 6,000 TPM**, confirmed empirically: a
+request at ~7K tokens returned `429 ... on tokens per minute (TPM): Limit 6000`.
+That is tighter than the ceiling it replaces, but it is a **rate limit, not a
+per-request cap** — it throttles throughput rather than truncating history, so it
+does not justify the same design in the same way.
+
+`adr/0008` needs amending before any sweep runs. Two tests now guard the live
+premise rather than a constant: `test_no_provider_now_forces_an_8k_context_cap`
+and `test_groq_tpm_is_the_new_binding_constraint`.

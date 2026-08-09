@@ -154,8 +154,10 @@ def main() -> int:
     # -- every referenced image exists
     for path in [*markdown, ROOT / "README.md"]:
         text = path.read_text(encoding="utf-8")
-        refs = [*re.findall(r'<img[^>]+src="([^"]+)"', text),
-                *re.findall(r"!\[[^\]]*\]\(([^)\s]+)\)", text)]
+        refs = [
+            *re.findall(r'<img[^>]+src="([^"]+)"', text),
+            *re.findall(r"!\[[^\]]*\]\(([^)\s]+)\)", text),
+        ]
         for src in refs:
             if src.startswith(("http://", "https://", "data:")):
                 continue
@@ -183,7 +185,9 @@ def main() -> int:
                     f"use an SVG in docs/assets or a ```mermaid block"
                 )
 
-    print(f"specs: {len(specs)} ({min(specs):03d}-{max(specs):03d})   docs: {len(REQUIRED_DOCS)}   adrs: {N_ADRS}")
+    print(
+        f"specs: {len(specs)} ({min(specs):03d}-{max(specs):03d})   docs: {len(REQUIRED_DOCS)}   adrs: {N_ADRS}"
+    )
     for note in notes:
         print(f"note  {note}")
     if failures:

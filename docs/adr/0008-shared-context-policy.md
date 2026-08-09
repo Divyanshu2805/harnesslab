@@ -1,6 +1,31 @@
 # ADR 0008 — One context policy across the pooled grid, plus a crossed compaction ablation
 
-**Status:** Accepted · **Date:** 2026-08-09
+**Status:** ⚠️ **PREMISE INVALIDATED — awaiting decision** · **Date:** 2026-08-09
+
+> **Day 1 probe finding.** This ADR's central premise was that Cerebras' free
+> tier caps context at 8,192 tokens and that Lane B is therefore *forced* into
+> compaction. **Cerebras' free tier is unavailable** — inference returns
+> HTTP 402, "Payment required to access this resource" — and the model has been
+> withdrawn from the pooled grid.
+>
+> With it gone, the tightest context ceiling in the grid is 32,768. **Nothing
+> now forces an 8K shared policy.**
+>
+> The new binding constraint is **Groq's 6,000 TPM**, confirmed empirically by a
+> `429 ... on tokens per minute (TPM): Limit 6000` at ~7K tokens. That is
+> *tighter* than the ceiling it replaces, but it is a **rate limit rather than a
+> per-request cap** — it throttles throughput rather than truncating history, so
+> it does not motivate the same design in the same way.
+>
+> **The decision below is not yet re-made.** Three options, in
+> `specs/SPEC-001-provider-registry.md` § Day 1 outcome:
+> keep an 8K cap as a deliberate comparability choice rather than a forced one;
+> raise the cap, since nothing compels 8K and a higher ceiling is less likely to
+> suppress the reflective harnesses; or restore Cerebras if a free tier
+> reappears. **No sweep may run until this is resolved** — the choice determines
+> whether the headline is a lower bound.
+
+---
 
 > **This is the most consequential decision in the project, and the one most
 > likely to be wrong in a way that produces a confident false conclusion.**

@@ -9,13 +9,13 @@ not run in numeric order — read this table, not the filenames.
 
 <!-- BEGIN GENERATED: progress -->
 
-`····························`  **0 / 32 specs accepted**
+`██··························`  **2 / 32 specs accepted**
 
-Draft 32
+Accepted 2  ·  Draft 30
 
-**Next:** SPEC-000 — Repo scaffold, uv, tooling, CI skeleton (day 1, Draft)
+**Next:** SPEC-002 — Deterministic procedural environment generator (day 2, Draft)
 
-9 documents · 11 ADRs · 0 implementation files
+9 documents · 11 ADRs · 9 implementation files
 
 <!-- END GENERATED: progress -->
 
@@ -25,8 +25,8 @@ Draft 32
 
 | Day | Spec | Title | Status |
 |---|---|---|---|
-| 1 | 000 | Repo scaffold, uv, tooling, CI skeleton | 📝 Draft |
-| 1 | 001 | Provider registry, quota limits, and capability probe | 📝 Draft |
+| 1 | 000 | Repo scaffold, uv, tooling, CI skeleton | ✅ Accepted |
+| 1 | 001 | Provider registry, quota limits, and capability probe | ✅ Accepted |
 | 2 | 002 | Deterministic procedural environment generator | 📝 Draft |
 | 3 | 003 | Tool layer over the Store-backed environment | 📝 Draft |
 | 4 | 004 | Deterministic scorers — final state, exact match, refusal | 📝 Draft |

@@ -54,8 +54,7 @@ STATUS_RANK = {"Draft": 0, "Approved": 1, "In Progress": 2, "Accepted": 3}
 # Every subprocess call pins UTF-8. Without it Python uses the system codepage
 # (cp1252 on Windows), which turns every em-dash in a spec title into mojibake
 # and throws outright on some bytes. The docs are full of em-dashes.
-_RUN = {"cwd": ROOT, "capture_output": True, "text": True,
-        "encoding": "utf-8", "errors": "replace"}
+_RUN = {"cwd": ROOT, "capture_output": True, "text": True, "encoding": "utf-8", "errors": "replace"}
 
 
 def git(*args: str) -> str:
@@ -221,7 +220,7 @@ def main() -> int:
         ]
 
     lines += ["### Files by area", ""]
-    for _, label in AREAS + [("", "Project files")]:
+    for _, label in [*AREAS, ("", "Project files")]:
         entries = grouped.get(label)
         if not entries:
             continue

@@ -1,7 +1,7 @@
 ---
 spec: 000
 title: Repo scaffold, uv, tooling, CI skeleton
-status: Draft
+status: Accepted
 depends_on: []
 day: 1
 ---

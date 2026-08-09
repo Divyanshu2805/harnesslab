@@ -93,9 +93,7 @@ def build_progress(specs: list[Spec]) -> str:
     filled = round(bar_width * accepted / total) if total else 0
     bar = "█" * filled + "·" * (bar_width - filled)
 
-    nxt = next(
-        (s for s in specs if s.status in ("Draft", "Approved", "In Progress")), None
-    )
+    nxt = next((s for s in specs if s.status in ("Draft", "Approved", "In Progress")), None)
     next_line = (
         f"**Next:** SPEC-{nxt.num:03d} — {nxt.title} (day {nxt.day}, {nxt.status})"
         if nxt
@@ -116,9 +114,7 @@ def build_spec_status(specs: list[Spec]) -> str:
     lines = ["| Day | Spec | Title | Status |", "|---|---|---|---|"]
     for s in specs:
         mark = {"Accepted": "✅", "In Progress": "🔨", "Approved": "📋", "Draft": "📝"}
-        lines.append(
-            f"| {s.day} | {s.num:03d} | {s.title} | {mark.get(s.status, '')} {s.status} |"
-        )
+        lines.append(f"| {s.day} | {s.num:03d} | {s.title} | {mark.get(s.status, '')} {s.status} |")
     return "\n".join(lines) + "\n"
 
 

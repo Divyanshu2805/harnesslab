@@ -20,13 +20,13 @@ A leaderboard is published as a by-product, not as the contribution.
 
 <!-- BEGIN GENERATED: progress -->
 
-`····························`  **0 / 32 specs accepted**
+`██··························`  **2 / 32 specs accepted**
 
-Draft 32
+Accepted 2  ·  Draft 30
 
-**Next:** SPEC-000 — Repo scaffold, uv, tooling, CI skeleton (day 1, Draft)
+**Next:** SPEC-002 — Deterministic procedural environment generator (day 2, Draft)
 
-9 documents · 11 ADRs · 0 implementation files
+9 documents · 11 ADRs · 9 implementation files
 
 <!-- END GENERATED: progress -->
 
